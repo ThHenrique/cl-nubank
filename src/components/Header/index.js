@@ -5,10 +5,16 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import * as VisibilityValues from "../../store/actions/visibilityValues";
+import * as OnTapIconsHeader from "../../store/actions/iconsHeader";
 
 export default function Header() {
   const [visibility, setVisibility] = React.useState(true);
   const dispatch = useDispatch();
+
+  const showIconHeader = useSelector(
+    (state) => state.iconsHeader.showSettings,
+    [showIconHeader]
+  );
 
   const handleVisibility = () => {
     dispatch(VisibilityValues.handleVisibilityValues(!visibility));
@@ -16,27 +22,47 @@ export default function Header() {
     setVisibility(!visibility);
   };
 
+  const handleSettings = (showSettings) => {
+    dispatch(OnTapIconsHeader.onTapSettings(showSettings));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.textView}>
-        <Text style={styles.textName}>Olá</Text>
-        <Text style={styles.textName}>Henrique</Text>
+        <Text style={styles.textName} numberOfLines={1} ellipsizeMode="tail">
+          Olá, Henrique Ferreiraaaaaaaaaaaaaaaaaaa
+        </Text>
       </View>
-      <View style={styles.buttonsView}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleVisibility()}
-        >
-          {visibility ? (
-            <MaterialIcons name="visibility-off" color="#FFF" size={24} />
-          ) : (
-            <MaterialIcons name="visibility" color="#FFF" size={24} />
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
-          <MaterialIcons name="settings" color="#FFF" size={24} />
-        </TouchableOpacity>
-      </View>
+
+      {!showIconHeader ? (
+        <View style={styles.buttonsView}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleVisibility()}
+          >
+            {visibility ? (
+              <MaterialIcons name="visibility-off" color="#FFF" size={24} />
+            ) : (
+              <MaterialIcons name="visibility" color="#FFF" size={24} />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleSettings(true)}
+          >
+            <MaterialIcons name="settings" color="#FFF" size={24} />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.buttonsView}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleSettings(false)}
+          >
+            <MaterialIcons name="close" color="#FFF" size={24} />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
@@ -46,28 +72,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
 
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginTop: 30,
 
-    padding: 10,
+    paddingHorizontal: 20,
   },
 
   textView: {
+    flex: 1,
     flexDirection: "row",
 
     alignItems: "center",
   },
 
   textName: {
-    fontSize: 26,
+    fontSize: 32,
     color: "#FFF",
-    marginLeft: 10,
     fontWeight: "bold",
   },
 
   buttonsView: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+
+    marginLeft: 10,
   },
 
   button: {

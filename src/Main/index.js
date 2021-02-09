@@ -10,87 +10,123 @@ import {
   Image,
 } from "react-native";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { MaterialIcons } from "@expo/vector-icons";
 
 import Header from "../components/Header";
 import Tabs from "../components/Tabs";
+import Menu from "../components/Menu";
 
 import RewardsImage from "../images/rewards.png";
 
 export default function Main() {
-  const dispatch = useDispatch();
   const visibilityValues = useSelector(
     (state) => state.visibilityValues.visibility,
     [visibilityValues]
   );
 
+  const showMenu = useSelector((state) => state.iconsHeader.showSettings, [
+    showMenu,
+  ]);
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
         <Header />
-        <ScrollView style={styles.content} overScrollMode="never">
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <MaterialIcons name="credit-card" size={28} color="#BBB" />
-              <Text style={styles.title}>Cartão de crédito</Text>
-            </View>
+        {showMenu ? (
+          <Menu />
+        ) : (
+          <>
+            <ScrollView style={styles.content} overScrollMode="never">
+              <View style={styles.card}>
+                <View style={styles.cardHeader}>
+                  <MaterialIcons name="credit-card" size={28} color="#BBB" />
+                  <Text style={styles.title}>Cartão de crédito</Text>
+                </View>
 
-            <Text style={styles.subtitle}>Fatura atual</Text>
+                <Text style={styles.subtitle}>Fatura atual</Text>
 
-            <View style={styles.cardBody}>
-              <Text style={styles.monetaryValue}>
-                R$ 24.887.59 {visibilityValues ? "HEHE" : "HAHA"}
-              </Text>
-            </View>
-            <View style={styles.cardFooter}>
-              <Text style={styles.textFooter}>Limite disponível</Text>
-              <Text style={styles.monetaryValueFooter}>R$ 38.444,00</Text>
-            </View>
-          </View>
-
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <MaterialIcons name="monetization-on" size={28} color="#BBB" />
-              <Text style={styles.title}>Conta</Text>
-            </View>
-
-            <Text style={styles.subtitle}>Saldo disponível</Text>
-
-            <View style={styles.cardBody}>
-              <Text style={styles.monetaryValue}>R$ 32.470,00</Text>
-            </View>
-            <View style={styles.cardFooter}>
-              <Text style={styles.textFooter}>Sua conta rendeu no total</Text>
-              <Text style={styles.monetaryValueFooter}>R$ 10,49</Text>
-            </View>
-          </View>
-
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <View style={styles.rewardsImage}>
-                <Image
-                  style={styles.rewardsImageView}
-                  source={RewardsImage}
-                  resizeMode="center"
-                />
+                {visibilityValues ? (
+                  <>
+                    <View style={styles.cardBody}>
+                      <Text style={styles.monetaryValue}>R$ 24.887.59</Text>
+                    </View>
+                    <View style={styles.cardFooter}>
+                      <Text style={styles.textFooter}>Limite disponível</Text>
+                      <Text style={styles.monetaryValueFooter}>
+                        R$ 38.444,00
+                      </Text>
+                    </View>
+                  </>
+                ) : (
+                  <View style={styles.visibilityOff} />
+                )}
               </View>
-              <Text style={styles.rewards}>Rewards</Text>
-            </View>
-            <View style={styles.cardBody}>
-              <Text style={styles.textRewards}>
-                Apague compras com pontos que nunca expiram.
-              </Text>
-            </View>
-            <View style={styles.cardFooter}>
-              <TouchableOpacity style={styles.button} onPress={() => {}}>
-                <Text style={styles.textButton}>CONHECER</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ScrollView>
-        <Tabs />
+
+              <View style={styles.card}>
+                <View style={styles.cardHeader}>
+                  <MaterialIcons
+                    name="monetization-on"
+                    size={28}
+                    color="#BBB"
+                  />
+                  <Text style={styles.title}>Conta</Text>
+                </View>
+
+                <Text style={styles.subtitle}>Saldo disponível</Text>
+
+                {visibilityValues ? (
+                  <>
+                    <View style={styles.cardBody}>
+                      <Text
+                        style={
+                          visibilityValues
+                            ? styles.monetaryValue
+                            : styles.visibilityOff
+                        }
+                      >
+                        R$ 32.470,00
+                      </Text>
+                    </View>
+                    <View style={styles.cardFooter}>
+                      <Text style={styles.textFooter}>
+                        Sua conta rendeu no total
+                      </Text>
+                      <Text style={styles.monetaryValueFooter}>R$ 10,49</Text>
+                    </View>
+                  </>
+                ) : (
+                  <View style={styles.visibilityOff} />
+                )}
+              </View>
+
+              <View style={styles.card}>
+                <View style={styles.cardHeader}>
+                  <View style={styles.rewardsImage}>
+                    <Image
+                      style={styles.rewardsImageView}
+                      source={RewardsImage}
+                      resizeMode="center"
+                    />
+                  </View>
+                  <Text style={styles.rewards}>Rewards</Text>
+                </View>
+                <View style={styles.cardBody}>
+                  <Text style={styles.textRewards}>
+                    Apague compras com pontos que nunca expiram.
+                  </Text>
+                </View>
+                <View style={styles.cardFooter}>
+                  <TouchableOpacity style={styles.button} onPress={() => {}}>
+                    <Text style={styles.textButton}>CONHECER</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+            <Tabs />
+          </>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -115,7 +151,7 @@ const styles = StyleSheet.create({
 
   card: {
     backgroundColor: "#FFF",
-    height: 200,
+    // height: 200,
 
     padding: 20,
     marginBottom: 20,
@@ -143,6 +179,13 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: "#2ba0dc",
     fontWeight: "bold",
+  },
+
+  visibilityOff: {
+    backgroundColor: "#A1A1A1",
+    opacity: 0.2,
+
+    height: 38,
   },
 
   cardBody: {},
