@@ -1,9 +1,21 @@
 import React from "react";
 
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+
 import { MaterialIcons } from "@expo/vector-icons";
+import * as VisibilityValues from "../../store/actions/visibilityValues";
 
 export default function Header() {
+  const [visibility, setVisibility] = React.useState(true);
+  const dispatch = useDispatch();
+
+  const handleVisibility = () => {
+    dispatch(VisibilityValues.handleVisibilityValues(!visibility));
+
+    setVisibility(!visibility);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.textView}>
@@ -11,8 +23,15 @@ export default function Header() {
         <Text style={styles.textName}>Henrique</Text>
       </View>
       <View style={styles.buttonsView}>
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
-          <MaterialIcons name="visibility" color="#FFF" size={24} />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => handleVisibility()}
+        >
+          {visibility ? (
+            <MaterialIcons name="visibility-off" color="#FFF" size={24} />
+          ) : (
+            <MaterialIcons name="visibility" color="#FFF" size={24} />
+          )}
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => {}}>
           <MaterialIcons name="settings" color="#FFF" size={24} />
@@ -40,7 +59,7 @@ const styles = StyleSheet.create({
   },
 
   textName: {
-    fontSize: 22,
+    fontSize: 26,
     color: "#FFF",
     marginLeft: 10,
     fontWeight: "bold",

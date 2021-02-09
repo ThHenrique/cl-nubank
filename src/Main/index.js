@@ -10,6 +10,8 @@ import {
   Image,
 } from "react-native";
 
+import { useDispatch, useSelector } from "react-redux";
+
 import { MaterialIcons } from "@expo/vector-icons";
 
 import Header from "../components/Header";
@@ -18,6 +20,12 @@ import Tabs from "../components/Tabs";
 import RewardsImage from "../images/rewards.png";
 
 export default function Main() {
+  const dispatch = useDispatch();
+  const visibilityValues = useSelector(
+    (state) => state.visibilityValues.visibility,
+    [visibilityValues]
+  );
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
@@ -29,10 +37,12 @@ export default function Main() {
               <Text style={styles.title}>Cartão de crédito</Text>
             </View>
 
-            <Text style={styles.subtitle}>Saldo disponível</Text>
+            <Text style={styles.subtitle}>Fatura atual</Text>
 
             <View style={styles.cardBody}>
-              <Text style={styles.monetaryValue}>R$ 24.887.59</Text>
+              <Text style={styles.monetaryValue}>
+                R$ 24.887.59 {visibilityValues ? "HEHE" : "HAHA"}
+              </Text>
             </View>
             <View style={styles.cardFooter}>
               <Text style={styles.textFooter}>Limite disponível</Text>
@@ -49,7 +59,7 @@ export default function Main() {
             <Text style={styles.subtitle}>Saldo disponível</Text>
 
             <View style={styles.cardBody}>
-              <Text style={styles.monetaryValue}>R$ 3.470,00</Text>
+              <Text style={styles.monetaryValue}>R$ 32.470,00</Text>
             </View>
             <View style={styles.cardFooter}>
               <Text style={styles.textFooter}>Sua conta rendeu no total</Text>
