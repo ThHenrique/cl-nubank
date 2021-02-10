@@ -42,7 +42,7 @@ export default function Main() {
   useEffect(() => {
     setTimeout(() => {
       dispatch(IsLoadingComponent.isLoadingComponent(false));
-    }, 10000);
+    }, 1000);
   }, []);
 
   return (
